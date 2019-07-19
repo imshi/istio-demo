@@ -1,13 +1,13 @@
 ## 服务网格应用实例
 **【说明】**：本仓库中所有的域名及镜像地址均为示例内容，非内部环境不能使用，且应用部署示例方式基于灵雀云（其实跟原生k8s差别不大）
->本文档就istio在实际业务环境使用做出说明，主要涉及两点：
->1. 应用部署
->2. 流量管理
+本文档就istio在实际业务环境使用做出说明，主要涉及两点：
+1. 应用部署
+2. 流量管理
 ---
->不同的应用使用不同的模式，如：
->1. 单版本：fronted-server（tcp）服务、gRPC-client（gRPC）服务；
->2. 多版本按比重（1:9）划分流量提供服务：message-center（http）服务；
->3. 多版本指定其中一个版本提供服务：gRPC-server（gRPC）服务；
+不同的应用使用不同的模式，如：
+1. 单版本：fronted-server（tcp）服务、gRPC-client（gRPC）服务；
+2. 多版本按比重（1:9）划分流量提供服务：message-center（http）服务；
+3. 多版本指定其中一个版本提供服务：gRPC-server（gRPC）服务；
 
 ## 应用示例
 - http示例项目地址：<http://api.dev.xchanger.cn/api/protected/apollo/>
