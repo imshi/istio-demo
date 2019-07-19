@@ -1,0 +1,75 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: ecarx-app
+  # app name with version
+  name: message-center-v1
+spec:
+  selector:
+    matchLabels:
+      # point 1:label
+      app: message-center
+  template:
+    metadata:
+      labels:
+        # point 2:label + version
+        app: message-center
+        version: v1
+    spec:
+      affinity: {}
+      containers:
+        - name: message-center
+          # point 3:image
+          image: >-
+            new-devlopment-hbykt.customerindex.alauda.cn:5000/message-center:dev-29
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 256M
+              cpu: 250m
+            limits:
+              memory: 2G
+              cpu: '1'
+          envFrom:
+            - configMapRef:
+                # point 4: configmaps
+                name: development-env-file
+      hostNetwork: false
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: message-center-v1
+  namespace: ecarx-app
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: message-center-v1
+  minReplicas: 1
+  maxReplicas: 20
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: message-center
+  namespace: ecarx-app
+spec:
+  selector:
+    app: message-center
+  ports:
+    # point 5：port.name：http
+    - name: http
+      port: 8360
+      targetPort: 8360
+
+# app name
+# app label
+# HPA name and spec name
+# image
+# version
+# with service
+# service port and port name（must be http or http2 or tcp）

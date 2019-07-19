@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ecarx-gv
+  namespace: ecarx-app
+spec:
+  hosts:
+  - "api.dev.xchanger.cn"
+  gateways:
+  - ecarx-dev-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: frontend-server

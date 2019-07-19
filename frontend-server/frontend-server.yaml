@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: frontend-server
+  namespace: ecarx-app
+spec:
+  selector:
+    matchLabels:
+      app: frontend-server
+  template:
+    metadata:
+      labels:
+        app: frontend-server
+    spec:
+      affinity: {}
+      containers:
+      - name: frontend-server
+        image: new-devlopment-hbykt.customerindex.alauda.cn:5000/frontend-server:2.1.0-6
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256M
+          requests:
+            cpu: 250m
+            memory: 256M
+        envFrom:
+        - configMapRef:
+            name: development-env-file
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: frontend-server
+  namespace: ecarx-app
+spec:
+  maxReplicas: 20
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: frontend-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-server
+  namespace: ecarx-app
+spec:
+  ports:
+  - name: tcp
+    nodePort: 30080
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: frontend-server
+  type: NodePort

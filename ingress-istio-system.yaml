@@ -1,0 +1,45 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus
+  namespace: istio-system
+spec:
+  rules:
+  - host: pms-dev.xchanger.cn
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: prometheus
+          servicePort: 9090
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: servicegraph
+  namespace: istio-system
+spec:
+  rules:
+  - host: servicegraph-dev.xchanger.cn
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: servicegraph
+          servicePort: 8088
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tracing
+  namespace: istio-system
+spec:
+  rules:
+  - host: tracing-dev.xchanger.cn
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tracing
+          servicePort: 80

@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: configserver-config
+spec:
+  hosts:
+  - 121.196.207.240
+  ports:
+  - number: 8084
+    protocol: TCP
+    name: tcp-port
+  resolution: NONE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: api-config-server
+spec:
+  hosts:
+  - 10.160.5.196
+  ports:
+  - number: 10011
+    protocol: TCP
+    name: tcp-port
+  resolution: NONE

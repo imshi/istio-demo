@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: ecarx-app
+  name: grpc-client-v2
+spec:
+  selector:
+    matchLabels:
+      # point 1:label
+      app: grpc-client
+  template:
+    metadata:
+      labels:
+        # point 2:label + version
+        app: grpc-client
+        version: v2
+    spec:
+      affinity: {}
+      containers:
+        - name: grpc-client
+          # point 3:image
+          image: >-
+            new-devlopment-hbykt.customerindex.alauda.cn:5000/grpc-client:v0.2
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 256M
+              cpu: 250m
+            limits:
+              memory: 2G
+              cpu: '1'
+          envFrom:
+            - configMapRef:
+                # point 4: configmaps
+                name: development-env-file
+      hostNetwork: false
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: grpc-client-v2
+  namespace: ecarx-app
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: grpc-client-v2
+  minReplicas: 1
+  maxReplicas: 20
+
+# app name
+# app lebel
+# HPA name and spec name
+# image
+# version
+# without service
